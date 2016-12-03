@@ -1,0 +1,31 @@
+{
+  "name": "xz1mefx/yii2-adminlte",
+  "description": "AdminLTE extension for yii2, include admin lte asset, widgets and helpers",
+  "type": "yii2-extension",
+  "keywords": [
+    "yii2",
+    "adminlte",
+    "admin lte",
+    "admin-lte",
+    "asset",
+    "css",
+    "xZ1mEFx"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Vitalii Zagorodniuk",
+      "email": "vitaliizagorodniuk@gmail.com"
+    }
+  ],
+  "require": {
+    "yiisoft/yii2": "*",
+    "yiisoft/yii2-bootstrap": "2.*",
+    "almasaeed2010/adminlte": "~2.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "xz1mefx\\adminlte\\": ""
+    }
+  }
+}
