@@ -28,5 +28,7 @@
       "xz1mefx\\adminlte\\": ""
     }
   },
-  "preferred-install": "dist"
+  "config": {
+    "preferred-install": "dist"
+  }
 }
