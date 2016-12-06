@@ -26,6 +26,7 @@ class AdminLteAsset extends AssetBundle
         'yii\bootstrap\BootstrapAsset',
         'yii\bootstrap\BootstrapPluginAsset',
         'rmrevin\yii\fontawesome\AssetBundle',
+//        'xz1mefx\adminlte\web\PluginsAsset',
     ];
 
     /**
