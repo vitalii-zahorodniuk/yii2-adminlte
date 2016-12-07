@@ -2,11 +2,11 @@
 
 namespace xz1mefx\adminlte\widgets;
 
+use xz1mefx\adminlte\helpers\Html;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\Widget;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 
 /**
  * Breadcrumbs displays a list of links indicating the position of the current page in the whole site hierarchy.

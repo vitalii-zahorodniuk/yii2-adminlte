@@ -2,8 +2,8 @@
 
 namespace xz1mefx\adminlte\widgets;
 
+use xz1mefx\adminlte\helpers\Html;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 
 /**
  * Class ActiveField
