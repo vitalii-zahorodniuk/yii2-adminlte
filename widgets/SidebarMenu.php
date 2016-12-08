@@ -3,6 +3,7 @@
 namespace xz1mefx\adminlte\widgets;
 
 use xz1mefx\adminlte\helpers\Html;
+use Yii;
 use yii\base\Widget;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
@@ -12,26 +13,26 @@ use yii\helpers\Url;
  *
  * Menu items structure example:
  * ```php
- * $menuItems = [
- *   ['url' => 'site/index', 'icon' => 'th-list', 'label' => 'Dashboard', 'stickers' => [
- *       ['bgClass' => 'bg-red', 'label' => 'red'],
- *       ['bgClass' => 'label-success', 'label' => 's'],
- *       ['bgClass' => 'label-success', 'label' => 's2'],
- *       ['bgClass' => 'bg-purple', 'label' => 'p'],
- *   ]],
- *   ['label' => 'Menu level 1', 'items' => [
- *       ['label' => 'Menu level 2', 'items' => [
- *           ['label' => 'Menu level 3', 'items' => [
- *               ['label' => 'Menu level 4', 'icon' => 'user', 'items' => [
- *                  ['label' => 'Lvl4 page 1', 'url' => ['site/index']],
- *                  ['label' => 'Lvl4 page 2', 'url' => ['site/index']],
- *               ]],
- *           ]],
- *           ['url' => ['site/index'], 'label' => 'Lvl2 page'],
- *       ]],
- *   ]],
- *   ['url' => '//www.ukr.net', 'label' => 'ukr.net', 'icon' => 'user', 'iconOptions' => ['prefix' => 'fa fa-']],
- * ];
+ *  $menuItems = [
+ *      ['url' => ['site/error'], 'icon' => 'th-list', 'label' => 'Dashboard', 'stickers' => [
+ *          ['bgClass' => 'bg-red', 'label' => 'red'],
+ *          ['bgClass' => 'label-success', 'label' => 's'],
+ *          ['bgClass' => 'label-success', 'label' => 's'],
+ *          ['bgClass' => 'bg-purple', 'label' => 'p'],
+ *      ]],
+ *      ['label' => 'Menu level 1', 'items' => [
+ *          ['label' => 'Menu level 2', 'items' => [
+ *              ['label' => 'Menu level 3', 'items' => [
+ *                  ['label' => 'Menu level 4', 'icon' => 'user', 'items' => [
+ *                      ['label' => 'Lvl4 page 1', 'url' => ['site/index']],
+ *                      ['label' => 'Lvl4 page 2', 'url' => ['site/index'], 'active' => true],
+ *                  ]],
+ *              ]],
+ *              ['url' => ['site/index'], 'label' => 'Lvl2 page'],
+ *          ]],
+ *      ]],
+ *      ['url' => '//www.ukr.net', 'label' => 'ukr.net', 'icon' => 'user', 'iconOptions' => ['prefix' => 'fa fa-']],
+ *  ];
  * ```
  *
  * @package xz1mefx\adminlte\widgets
@@ -44,7 +45,7 @@ class SidebarMenu extends Widget
     public $headerTransform = 'uppercase';
     public $headerTemplate = "<li class=\"header\" style=\"text-transform: {headerTransform};\">{headerLabel}</li>\n";
 
-    public $itemTemplate = "<li class=\"{class}\"><a href=\"{url}\">{icon}{label}<span class=\"pull-right-container\">{treeViewRightIcon}{stickers}</span></a>{treeViewMenu}</li>\n";
+    public $itemTemplate = "<li class=\"{class}\"><a href=\"{url}\">{icon}<span>{label}</span><span class=\"pull-right-container\">{treeViewRightIcon}{stickers}</span></a>{treeViewMenu}</li>\n";
     public $treeViewMenuTemplate = "<ul class=\"treeview-menu\">\n{content}</ul>";
 
     public $menuItems = NULL;
@@ -98,11 +99,14 @@ class SidebarMenu extends Widget
                 } else {
                     $defaultIcon = Html::icon('circle-o', ['prefix' => 'fa fa-']);
                 }
+            } else {
+                if (ArrayHelper::getValue($item, 'active', false) || $this->isItemActive($item)) {
+                    $replacePairs['{class}'] .= (empty($replacePairs['{class}']) ? '' : ' ') . 'active';
+                }
             }
-            $replacePairs['{class}'] = $replacePairs['{class}'] . (ArrayHelper::getValue($item, 'active', false) ? ' active' : '');
             $replacePairs['{url}'] = empty($item['url']) ? '#' : Url::to($item['url']);
             $replacePairs['{icon}'] = empty($item['icon']) ?
-                $defaultIcon : (Html::icon($item['icon'], ArrayHelper::getValue($item, 'iconOptions', [])) . '&nbsp;');
+                $defaultIcon : (Html::icon($item['icon'], ArrayHelper::merge(ArrayHelper::getValue($item, 'iconOptions', []), ['tag' => 'i'])) . '&nbsp;');
             $replacePairs['{label}'] = empty($item['label']) ? '&nbsp;' : $item['label'];
             $stickers = '';
             if (!empty($item['stickers']) && is_array($item['stickers'])) {
@@ -116,5 +120,41 @@ class SidebarMenu extends Widget
         }
 
         return $menuContent;
+    }
+
+    /**
+     * Checks whether a menu item is active.
+     * This is done by checking if [[route]] and [[params]] match that specified in the `url` option of the menu item.
+     * When the `url` option of a menu item is specified in terms of an array, its first element is treated
+     * as the route for the item and the rest of the elements are the associated parameters.
+     * Only when its route and parameters match [[route]] and [[params]], respectively, will a menu item
+     * be considered active.
+     * @param array $item the menu item to be checked
+     * @return boolean whether the menu item is active
+     */
+    protected function isItemActive($item)
+    {
+        if (isset($item['url']) && is_array($item['url']) && isset($item['url'][0])) {
+            $route = $item['url'][0];
+            if ($route[0] !== '/' && Yii::$app->controller) {
+                $route = Yii::$app->controller->module->getUniqueId() . '/' . $route;
+            }
+            if (ltrim($route, '/') !== Yii::$app->controller->getRoute()) {
+                return false;
+            }
+            unset($item['url']['#']);
+            if (count($item['url']) > 1) {
+                $params = $item['url'];
+                unset($params[0]);
+                foreach ($params as $name => $value) {
+                    $queryParams = Yii::$app->request->getQueryParams();
+                    if ($value !== NULL && (!isset($queryParams[$name]) || $queryParams[$name] != $value)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
     }
 }

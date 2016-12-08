@@ -14,13 +14,13 @@ class AdminLteAsset extends AssetBundle
     public $sourcePath = '@vendor/xz1mefx/yii2-adminlte/assets';
 
     public $css = [
-        'adminlte/css/AdminLTE.css',
-//        'adminlte/css/AdminLTE.min.css',
+//        'adminlte/css/AdminLTE.css',
+        'adminlte/css/AdminLTE.min.css',
     ];
 
     public $js = [
-        'adminlte/js/app.js',
-//        'adminlte/js/app.min.js',
+//        'adminlte/js/app.js',
+        'adminlte/js/app.min.js',
     ];
 
     public $depends = [
