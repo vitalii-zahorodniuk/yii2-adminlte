@@ -5,7 +5,6 @@
   "keywords": [
     "yii2",
     "adminlte",
-    "admin lte",
     "admin-lte",
     "asset",
     "css",
@@ -21,7 +20,6 @@
   "require": {
     "yiisoft/yii2": "*",
     "yiisoft/yii2-bootstrap": "2.*",
-    "almasaeed2010/adminlte": "~2.3",
     "rmrevin/yii2-fontawesome": "~2.17"
   },
   "autoload": {

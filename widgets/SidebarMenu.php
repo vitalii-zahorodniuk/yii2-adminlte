@@ -14,21 +14,21 @@ use yii\helpers\Url;
  * ```php
  * $menuItems = [
  *   ['url' => 'site/index', 'icon' => 'th-list', 'label' => 'Dashboard', 'stickers' => [
- *      ['bgClass' => 'bg-red', 'label' => 'red'],
+ *       ['bgClass' => 'bg-red', 'label' => 'red'],
  *       ['bgClass' => 'label-success', 'label' => 's'],
- *       ['bgClass' => 'label-success', 'label' => 's'],
- *      ['bgClass' => 'bg-purple', 'label' => 'p'],
+ *       ['bgClass' => 'label-success', 'label' => 's2'],
+ *       ['bgClass' => 'bg-purple', 'label' => 'p'],
  *   ]],
  *   ['label' => 'Menu level 1', 'items' => [
  *       ['label' => 'Menu level 2', 'items' => [
- *          ['label' => 'Menu level 3', 'items' => [
+ *           ['label' => 'Menu level 3', 'items' => [
  *               ['label' => 'Menu level 4', 'icon' => 'user', 'items' => [
  *                  ['label' => 'Lvl4 page 1', 'url' => ['site/index']],
  *                  ['label' => 'Lvl4 page 2', 'url' => ['site/index']],
  *               ]],
- *          ]],
- *          ['url' => ['site/index'], 'label' => 'Lvl2 page'],
- *      ]],
+ *           ]],
+ *           ['url' => ['site/index'], 'label' => 'Lvl2 page'],
+ *       ]],
  *   ]],
  *   ['url' => '//www.ukr.net', 'label' => 'ukr.net', 'icon' => 'user', 'iconOptions' => ['prefix' => 'fa fa-']],
  * ];
@@ -99,6 +99,7 @@ class SidebarMenu extends Widget
                     $defaultIcon = Html::icon('circle-o', ['prefix' => 'fa fa-']);
                 }
             }
+            $replacePairs['{class}'] = $replacePairs['{class}'] . (ArrayHelper::getValue($item, 'active', false) ? ' active' : '');
             $replacePairs['{url}'] = empty($item['url']) ? '#' : Url::to($item['url']);
             $replacePairs['{icon}'] = empty($item['icon']) ?
                 $defaultIcon : (Html::icon($item['icon'], ArrayHelper::getValue($item, 'iconOptions', [])) . '&nbsp;');
