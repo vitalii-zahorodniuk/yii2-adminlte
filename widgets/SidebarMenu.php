@@ -84,7 +84,11 @@ class SidebarMenu extends Widget
 
         foreach ($itemsArray as $item) {
             $replacePairs = [];
-            $defaultIcon = '';
+            $iconOptions = ArrayHelper::merge(
+                (empty($item['icon']) ? [] : ArrayHelper::getValue($item, 'iconOptions', [])),
+                ['tag' => 'i']
+            );
+            $defaultIcon = Html::icon($firstLevel ? 'chevron-right' : 'circle-o', ['prefix' => 'fa fa-', 'tag' => 'i']);
 
             $replacePairs['{class}'] = '';
             $replacePairs['{treeViewRightIcon}'] = '';
@@ -96,8 +100,6 @@ class SidebarMenu extends Widget
                 ]);
                 if ($firstLevel) {
                     $replacePairs['{class}'] = 'treeview';
-                } else {
-                    $defaultIcon = Html::icon('circle-o', ['prefix' => 'fa fa-']);
                 }
             } else {
                 if (ArrayHelper::getValue($item, 'active', false) || $this->isItemActive($item)) {
@@ -105,8 +107,7 @@ class SidebarMenu extends Widget
                 }
             }
             $replacePairs['{url}'] = empty($item['url']) ? '#' : Url::to($item['url']);
-            $replacePairs['{icon}'] = empty($item['icon']) ?
-                $defaultIcon : (Html::icon($item['icon'], ArrayHelper::merge(ArrayHelper::getValue($item, 'iconOptions', []), ['tag' => 'i'])) . '&nbsp;');
+            $replacePairs['{icon}'] = empty($item['icon']) ? $defaultIcon : (Html::icon($item['icon'], $iconOptions) . '&nbsp;');
             $replacePairs['{label}'] = empty($item['label']) ? '&nbsp;' : $item['label'];
             $stickers = '';
             if (!empty($item['stickers']) && is_array($item['stickers'])) {
