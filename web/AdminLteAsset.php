@@ -14,13 +14,13 @@ class AdminLteAsset extends AssetBundle
     public $sourcePath = '@vendor/xz1mefx/yii2-adminlte/assets';
 
     public $css = [
-        'adminlte-2.3.8/css/AdminLTE.css',
-//        'adminlte-2.3.8/css/AdminLTE.min.css',
+        'adminlte/css/AdminLTE.css',
+//        'adminlte/css/AdminLTE.min.css',
     ];
 
     public $js = [
-        'adminlte-2.3.8/js/app.js',
-//        'adminlte-2.3.8/js/app.min.js',
+        'adminlte/js/app.js',
+//        'adminlte/js/app.min.js',
     ];
 
     public $depends = [
@@ -47,7 +47,7 @@ class AdminLteAsset extends AssetBundle
             if (('_all-skins' !== $this->skin) && (strpos($this->skin, 'skin-') !== 0)) {
                 throw new Exception('Invalid skin specified');
             }
-            $this->css[] = sprintf('adminlte-2.3.8/css/skins/%s.min.css', $this->skin);
+            $this->css[] = sprintf('adminlte/css/skins/%s.min.css', $this->skin);
         }
         parent::init();
     }
