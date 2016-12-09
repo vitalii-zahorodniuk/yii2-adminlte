@@ -38,7 +38,7 @@ class Html extends BaseHtml
      * @param array $options
      * @return string
      */
-    public static function labelSticker($bgClass, $label, $options = [])
+    public static function infoLabel($bgClass, $label, $options = [])
     {
         $tag = ArrayHelper::remove($options, 'tag', 'span');
         static::addCssClass($options, ['label']);

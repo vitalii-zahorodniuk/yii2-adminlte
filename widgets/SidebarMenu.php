@@ -112,7 +112,7 @@ class SidebarMenu extends Widget
             $stickers = '';
             if (!empty($item['stickers']) && is_array($item['stickers'])) {
                 foreach (array_reverse($item['stickers'], true) as $label) {
-                    $stickers .= Html::labelSticker($label['bgClass'], $label['label'], ['class' => 'pull-right']);
+                    $stickers .= Html::infoLabel($label['bgClass'], $label['label'], ['class' => 'pull-right']);
                 }
             }
             $replacePairs['{stickers}'] = $stickers;
