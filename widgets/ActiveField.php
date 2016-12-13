@@ -2,6 +2,7 @@
 
 namespace xz1mefx\adminlte\widgets;
 
+use Symfony\Component\CssSelector\Exception\InternalErrorException;
 use xz1mefx\adminlte\helpers\Html;
 use yii\helpers\ArrayHelper;
 
@@ -29,6 +30,9 @@ class ActiveField extends \yii\bootstrap\ActiveField
                 $tag = ArrayHelper::remove($options, 'tag', 'div');
                 $this->parts['{beginWrapper}'] = Html::beginTag($tag, $options);
                 $this->parts['{endWrapper}'] = Html::endTag($tag);
+            }
+            if (empty($this->parts['{glyphIcon}']) || !$this->_glyphIconAllowed) {
+                $this->parts['{glyphIcon}'] = '';
             }
             if ($this->enableLabel === false) {
                 $this->parts['{label}'] = '';
@@ -108,9 +112,14 @@ class ActiveField extends \yii\bootstrap\ActiveField
      *
      * @param $glyphIcon string Icon name
      * @return $this
+     * @throws InternalErrorException
      */
     public function glyphIcon($glyphIcon)
     {
+        if (empty($this->parts['{input}'])) {
+            throw new InternalErrorException('Firstly you must set field type!');
+        }
+
         if (empty($glyphIcon) || !$this->_glyphIconAllowed) {
             $this->parts['{glyphIcon}'] = '';
             return $this;
