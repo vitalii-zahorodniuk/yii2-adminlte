@@ -14,12 +14,17 @@ use yii\helpers\Url;
  * Menu items structure example:
  * ```php
  *  $menuItems = [
- *      ['url' => ['site/error'], 'icon' => 'th-list', 'label' => 'Dashboard', 'stickers' => [
- *          ['bgClass' => 'bg-red', 'label' => 'red'],
- *          ['bgClass' => 'label-success', 'label' => 's'],
- *          ['bgClass' => 'label-success', 'label' => 's'],
- *          ['bgClass' => 'bg-purple', 'label' => 'p'],
- *      ]],
+ *      [
+ *          'url' => ['site/error'],
+ *          'icon' => 'th-list',
+ *          'visible' => true,
+ *          'label' => 'Dashboard', 'stickers' => [
+ *              ['bgClass' => 'bg-red', 'label' => 'red'],
+ *              ['bgClass' => 'label-success', 'label' => 's'],
+ *              ['bgClass' => 'label-success', 'label' => 's'],
+ *              ['bgClass' => 'bg-purple', 'label' => 'p'],
+ *          ]
+ *      ],
  *      ['label' => 'Menu level 1', 'items' => [
  *          ['label' => 'Menu level 2', 'items' => [
  *              ['label' => 'Menu level 3', 'items' => [
@@ -50,6 +55,9 @@ class SidebarMenu extends Widget
 
     public $menuItems = NULL;
 
+    /**
+     * @inheritdoc
+     */
     public function run()
     {
         if (empty($this->menuItems)) {
@@ -58,6 +66,9 @@ class SidebarMenu extends Widget
         return $this->renderWidget();
     }
 
+    /**
+     * @return string
+     */
     private function renderWidget()
     {
         $menuContent = '';
@@ -74,6 +85,11 @@ class SidebarMenu extends Widget
         ]);
     }
 
+    /**
+     * @param $itemsArray
+     * @param bool $firstLevel
+     * @return string
+     */
     private function renderMenuItems($itemsArray, $firstLevel = false)
     {
         $menuContent = '';
@@ -105,6 +121,9 @@ class SidebarMenu extends Widget
                 if (ArrayHelper::getValue($item, 'active', false) || $this->isItemActive($item)) {
                     $replacePairs['{class}'] .= (empty($replacePairs['{class}']) ? '' : ' ') . 'active';
                 }
+            }
+            if (!ArrayHelper::getValue($item, 'visible', true)) {
+                $replacePairs['{class}'] .= (empty($replacePairs['{class}']) ? '' : ' ') . 'hide';
             }
             $replacePairs['{url}'] = empty($item['url']) ? '#' : Url::to($item['url']);
             $replacePairs['{icon}'] = empty($item['icon']) ? $defaultIcon : (Html::icon($item['icon'], $iconOptions) . '&nbsp;');
