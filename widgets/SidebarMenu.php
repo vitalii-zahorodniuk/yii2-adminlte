@@ -6,7 +6,7 @@ use xz1mefx\adminlte\helpers\Html;
 use Yii;
 use yii\base\Widget;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Url;
+use xz1mefx\base\helpers\Url;
 
 /**
  * Class SidebarMenu
